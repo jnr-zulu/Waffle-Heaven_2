@@ -5,35 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waffle Heaven - Delicious Waffles in White River</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/database.js" defer></script>
+    <script src="js/auth.js" defer></script>
+    <script src="js/cart.js" defer></script>
     <script src="js/main.js" defer></script>
 </head>
 <body>
+    <div id="notification" class="notification"></div>
+    
     <header>
         <div class="logo-container">
-            <h1>Waffle Heaven</h1>
+            <h1><a href="#" data-page="home">🧇 Waffle Heaven</a></h1>
         </div>
         <nav>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">Home</a></li>
-                <li><a href="pages/menu.html">Menu</a></li>
-                <li><a href="pages/reservations.html">Reservations</a></li>
-                <li><a href="pages/order-online.html">Order Online</a></li>
-                <li><a href="pages/contact.html">Contact</a></li>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#" data-page="home" class="nav-link active">Home</a></li>
+                <li><a href="#" data-page="menu" class="nav-link">Menu</a></li>
+                <li><a href="#" data-page="reservations" class="nav-link">Reservations</a></li>
+                <li><a href="#" data-page="order-online" class="nav-link">Order Online</a></li>
+                <li><a href="#" data-page="contact" class="nav-link">Contact</a></li>
                 <li class="account-dropdown">
                     <a href="#" id="account-link">Account</a>
-                    <div class="dropdown-content">
-                        <a href="pages/login.html">Login</a>
-                        <a href="pages/register.html">Register</a>
+                    <div class="dropdown-content" id="account-dropdown">
+                        <a href="#" data-page="login" id="login-link">Login</a>
+                        <a href="#" data-page="register" id="register-link">Register</a>
+                        <a href="#" id="logout-link" style="display: none;">Logout</a>
+                        <a href="#" data-page="profile" id="profile-link" style="display: none;">My Profile</a>
+                        <a href="#" data-page="orders" id="orders-link" style="display: none;">My Orders</a>
                     </div>
                 </li>
             </ul>
             <div class="cart-icon">
-                <a href="pages/cart.html">
-                    <img src="img/cart-icon.png" alt="Shopping Cart">
+                <a href="#" data-page="cart">
+                    <span style="font-size: 24px;">🛒</span>
                     <span id="cart-count">0</span>
                 </a>
             </div>
-            <div class="hamburger">
+            <div class="hamburger" id="hamburger">
                 <div class="line1"></div>
                 <div class="line2"></div>
                 <div class="line3"></div>
@@ -41,72 +49,416 @@
         </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Experience Waffle Paradise</h2>
-                <p>Indulge in our delicious homemade waffles with a variety of toppings</p>
-                <div class="hero-buttons">
-                    <a href="pages/menu.html" class="btn primary-btn">View Menu</a>
-                    <a href="pages/order-online.html" class="btn secondary-btn">Order Now</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="featured-categories">
-            <h2 class="section-title">Explore Our Menu</h2>
-            <div class="category-grid">
-                <div class="category-card">
-                    <img src="img/sweet-waffles.jpg" alt="Sweet Waffles">
-                    <h3>Sweet Waffles</h3>
-                    <a href="pages/menu.html#sweet" class="btn small-btn">View All</a>
-                </div>
-                <div class="category-card">
-                    <img src="img/savory-waffles.jpg" alt="Savory Waffles">
-                    <h3>Savory Waffles</h3>
-                    <a href="pages/menu.html#savory" class="btn small-btn">View All</a>
-                </div>
-                <div class="category-card">
-                    <img src="img/beverages.jpg" alt="Beverages">
-                    <h3>Beverages</h3>
-                    <a href="pages/menu.html#beverages" class="btn small-btn">View All</a>
-                </div>
-                <div class="category-card">
-                    <img src="img/special-combos.jpg" alt="Special Combos">
-                    <h3>Special Combos</h3>
-                    <a href="pages/menu.html#combos" class="btn small-btn">View All</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="special-offers">
-            <h2 class="section-title">Special Offers</h2>
-            <div class="offers-container">
-                <div class="offer-card">
-                    <div class="offer-content">
-                        <h3>Family Waffle Platter</h3>
-                        <p>Get 15% off when you order our family waffle platter with 4 waffles and 4 drinks</p>
-                        <a href="pages/order-online.html#special-offers" class="btn primary-btn">Order Now</a>
+    <main id="main-content">
+        <!-- Home Page -->
+        <section id="home" class="page-content active">
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Experience Waffle Paradise</h2>
+                    <p>Indulge in our delicious homemade waffles with a variety of toppings</p>
+                    <div class="hero-buttons">
+                        <button class="btn primary-btn" data-page="menu">View Menu</button>
+                        <button class="btn secondary-btn" data-page="order-online">Order Now</button>
                     </div>
                 </div>
-                <div class="offer-card">
-                    <div class="offer-content">
-                        <h3>Weekday Special</h3>
-                        <p>Buy 1 Get 1 Free on all waffles every Tuesday from 2-5 PM</p>
-                        <a href="pages/reservations.html" class="btn primary-btn">Reserve Now</a>
+            </section>
+
+            <section class="featured-categories">
+                <h2 class="section-title">Explore Our Menu</h2>
+                <div class="category-grid">
+                    <div class="category-card" data-category="sweet">
+                        <div class="category-card-image">🧇</div>
+                        <h3>Sweet Waffles</h3>
+                        <button class="btn small-btn" data-page="menu" data-filter="sweet">View All</button>
+                    </div>
+                    <div class="category-card" data-category="savory">
+                        <div class="category-card-image">🥓</div>
+                        <h3>Savory Waffles</h3>
+                        <button class="btn small-btn" data-page="menu" data-filter="savory">View All</button>
+                    </div>
+                    <div class="category-card" data-category="beverages">
+                        <div class="category-card-image">☕</div>
+                        <h3>Beverages</h3>
+                        <button class="btn small-btn" data-page="menu" data-filter="beverages">View All</button>
+                    </div>
+                    <div class="category-card" data-category="combos">
+                        <div class="category-card-image">🍽️</div>
+                        <h3>Special Combos</h3>
+                        <button class="btn small-btn" data-page="menu" data-filter="combos">View All</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="special-offers">
+                <h2 class="section-title">Special Offers</h2>
+                <div class="offers-container">
+                    <div class="offer-card">
+                        <div class="offer-content">
+                            <h3>Family Waffle Platter</h3>
+                            <p>Get 15% off when you order our family waffle platter with 4 waffles and 4 drinks</p>
+                            <button class="btn primary-btn" data-page="order-online">Order Now</button>
+                        </div>
+                    </div>
+                    <div class="offer-card">
+                        <div class="offer-content">
+                            <h3>Weekday Special</h3>
+                            <p>Buy 1 Get 1 Free on all waffles every Tuesday from 2-5 PM</p>
+                            <button class="btn primary-btn" data-page="reservations">Reserve Now</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="reservation-cta">
+                <div class="cta-content">
+                    <h2>Book a Table</h2>
+                    <p>Reserve your spot for a wonderful waffle experience</p>
+                    <button class="btn primary-btn" data-page="reservations">Make Reservation</button>
+                </div>
+            </section>
+        </section>
+
+        <!-- Menu Page -->
+        <section id="menu" class="page-content">
+            <div class="container">
+                <h2 class="section-title">Our Menu</h2>
+                <div class="menu-filters">
+                    <button class="filter-btn active" data-filter="all">All Items</button>
+                    <button class="filter-btn" data-filter="sweet">Sweet Waffles</button>
+                    <button class="filter-btn" data-filter="savory">Savory Waffles</button>
+                    <button class="filter-btn" data-filter="beverages">Beverages</button>
+                    <button class="filter-btn" data-filter="combos">Combos</button>
+                </div>
+                <div id="menu-grid" class="menu-grid">
+                    <!-- Menu items will be loaded dynamically from database -->
+                    <div class="loading">Loading menu items...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Online Page -->
+        <section id="order-online" class="page-content">
+            <div class="container">
+                <h2 class="section-title">Order Online</h2>
+                <div class="order-options">
+                    <div class="order-type">
+                        <input type="radio" id="delivery" name="order-type" value="delivery" checked>
+                        <label for="delivery">🚗 Delivery</label>
+                    </div>
+                    <div class="order-type">
+                        <input type="radio" id="pickup" name="order-type" value="pickup">
+                        <label for="pickup">🏃 Pickup</label>
+                    </div>
+                </div>
+                <div class="menu-filters">
+                    <button class="filter-btn active" data-filter="all">All Items</button>
+                    <button class="filter-btn" data-filter="sweet">Sweet Waffles</button>
+                    <button class="filter-btn" data-filter="savory">Savory Waffles</button>
+                    <button class="filter-btn" data-filter="beverages">Beverages</button>
+                    <button class="filter-btn" data-filter="combos">Combos</button>
+                </div>
+                <div id="order-menu-grid" class="menu-grid">
+                    <!-- Menu items for ordering will be loaded dynamically from database -->
+                    <div class="loading">Loading menu items...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cart Page -->
+        <section id="cart" class="page-content">
+            <div class="container">
+                <h2 class="section-title">Shopping Cart</h2>
+                <div id="cart-items" class="cart-items">
+                    <!-- Cart items will be loaded dynamically -->
+                </div>
+                <div id="cart-summary" class="cart-summary">
+                    <div class="cart-total">
+                        <p>Subtotal: R<span id="subtotal">0.00</span></p>
+                        <p>Delivery Fee: R<span id="delivery-fee">0.00</span></p>
+                        <h3>Total: R<span id="total">0.00</span></h3>
+                    </div>
+                    <button class="btn primary-btn form-btn" id="checkout-btn">Proceed to Checkout</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reservations Page -->
+        <section id="reservations" class="page-content">
+            <div class="container">
+                <h2 class="section-title">Make a Reservation</h2>
+                <div class="form-container">
+                    <form id="reservation-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="res-name">Full Name *</label>
+                                <input type="text" id="res-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="res-phone">Phone Number *</label>
+                                <input type="tel" id="res-phone" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="res-email">Email Address *</label>
+                                <input type="email" id="res-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="res-guests">Number of Guests *</label>
+                                <select id="res-guests" required>
+                                    <option value="">Select guests</option>
+                                    <option value="1">1 Person</option>
+                                    <option value="2">2 People</option>
+                                    <option value="3">3 People</option>
+                                    <option value="4">4 People</option>
+                                    <option value="5">5 People</option>
+                                    <option value="6">6 People</option>
+                                    <option value="7">7 People</option>
+                                    <option value="8">8 People</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="res-date">Preferred Date *</label>
+                                <input type="date" id="res-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="res-time">Preferred Time *</label>
+                                <select id="res-time" required>
+                                    <option value="">Select time</option>
+                                    <option value="08:00">8:00 AM</option>
+                                    <option value="09:00">9:00 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="12:00">12:00 PM</option>
+                                    <option value="13:00">1:00 PM</option>
+                                    <option value="14:00">2:00 PM</option>
+                                    <option value="15:00">3:00 PM</option>
+                                    <option value="16:00">4:00 PM</option>
+                                    <option value="17:00">5:00 PM</option>
+                                    <option value="18:00">6:00 PM</option>
+                                    <option value="19:00">7:00 PM</option>
+                                    <option value="20:00">8:00 PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="res-notes">Special Requests (Optional)</label>
+                            <textarea id="res-notes" placeholder="Any special requests or dietary requirements..."></textarea>
+                        </div>
+                        <button type="submit" class="btn primary-btn form-btn">Make Reservation</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact" class="page-content">
+            <div class="container">
+                <h2 class="section-title">Contact Us</h2>
+                <div class="contact-info">
+                    <div class="contact-details">
+                        <h3>Get in Touch</h3>
+                        <p><strong>Address:</strong> 11 Spitskop Street, White River, Mpumalanga, South Africa</p>
+                        <p><strong>Phone:</strong> 0822166658</p>
+                        <p><strong>Email:</strong> patrickjunior1010@gmail.com</p>
+                        <h4>Hours:</h4>
+                        <p>Monday - Thursday: 8:00 AM - 8:00 PM</p>
+                        <p>Friday - Saturday: 8:00 AM - 10:00 PM</p>
+                        <p>Sunday: 9:00 AM - 6:00 PM</p>
+                    </div>
+                </div>
+                <div class="form-container">
+                    <h3>Send us a Message</h3>
+                    <form id="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contact-name">Name *</label>
+                                <input type="text" id="contact-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-email">Email *</label>
+                                <input type="email" id="contact-email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-subject">Subject *</label>
+                            <input type="text" id="contact-subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message">Message *</label>
+                            <textarea id="contact-message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn primary-btn form-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Login Page -->
+        <section id="login" class="page-content">
+            <div class="auth-section">
+                <div class="auth-container">
+                    <h2>Login to Your Account</h2>
+                    <form id="loginForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="loginEmail">Email Address</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn primary-btn form-btn">Login</button>
+                    </form>
+                    <div class="auth-links">
+                        <p>Don't have an account? <a href="#" data-page="register">Register here</a></p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="reservation-cta">
-            <div class="cta-content">
-                <h2>Book a Table</h2>
-                <p>Reserve your spot for a wonderful waffle experience</p>
-                <a href="pages/reservations.html" class="btn primary-btn">Make Reservation</a>
+        <!-- Register Page -->
+        <section id="register" class="page-content">
+            <div class="auth-section">
+                <div class="auth-container">
+                    <h2>Create Your Account</h2>
+                    <form id="registerForm" class="auth-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="registerFirstName">First Name</label>
+                                <input type="text" id="registerFirstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="registerLastName">Last Name</label>
+                                <input type="text" id="registerLastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email Address</label>
+                            <input type="email" id="registerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPhone">Phone Number</label>
+                            <input type="tel" id="registerPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerConfirmPassword">Confirm Password</label>
+                            <input type="password" id="registerConfirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn primary-btn form-btn">Create Account</button>
+                    </form>
+                    <div class="auth-links">
+                        <p>Already have an account? <a href="#" data-page="login">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="profile" class="page-content">
+            <div class="container">
+                <h2 class="section-title">My Profile</h2>
+                <div class="form-container">
+                    <form id="profile-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="profile-first-name">First Name</label>
+                                <input type="text" id="profile-first-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="profile-last-name">Last Name</label>
+                                <input type="text" id="profile-last-name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-email">Email</label>
+                            <input type="email" id="profile-email">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-phone">Phone</label>
+                            <input type="tel" id="profile-phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-address">Address</label>
+                            <textarea id="profile-address"></textarea>
+                        </div>
+                        <button type="submit" class="btn primary-btn form-btn">Update Profile</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Orders Page -->
+        <section id="orders" class="page-content">
+            <div class="container">
+                <h2 class="section-title">My Orders</h2>
+                <div id="orders-list" class="orders-list">
+                    <!-- Orders will be loaded dynamically from database -->
+                    <div class="loading">Loading your orders...</div>
+                </div>
             </div>
         </section>
     </main>
+
+    <!-- Modals -->
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Checkout</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="checkout-form">
+                    <h3>Delivery Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="checkout-name">Full Name *</label>
+                            <input type="text" id="checkout-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="checkout-phone">Phone Number *</label>
+                            <input type="tel" id="checkout-phone" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-address">Delivery Address *</label>
+                        <textarea id="checkout-address" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkout-notes">Special Instructions</label>
+                        <textarea id="checkout-notes"></textarea>
+                    </div>
+                    <h3>Payment Method</h3>
+                    <div class="payment-methods">
+                        <div class="payment-option">
+                            <input type="radio" id="cash" name="payment" value="cash" checked>
+                            <label for="cash">💰 Cash on Delivery</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="card" name="payment" value="card">
+                            <label for="card">💳 Card Payment</label>
+                        </div>
+                    </div>
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div id="checkout-items"></div>
+                        <div class="checkout-total">
+                            <p>Subtotal: R<span id="checkout-subtotal">0.00</span></p>
+                            <p>Delivery: R<span id="checkout-delivery">0.00</span></p>
+                            <h3>Total: R<span id="checkout-total">0.00</span></h3>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn primary-btn form-btn">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <div class="footer-container">
@@ -125,19 +477,19 @@
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="pages/menu.html">Menu</a></li>
-                    <li><a href="pages/reservations.html">Reservations</a></li>
-                    <li><a href="pages/order-online.html">Order Online</a></li>
-                    <li><a href="pages/contact.html">Contact</a></li>
+                    <li><a href="#" data-page="home">Home</a></li>
+                    <li><a href="#" data-page="menu">Menu</a></li>
+                    <li><a href="#" data-page="reservations">Reservations</a></li>
+                    <li><a href="#" data-page="order-online">Order Online</a></li>
+                    <li><a href="#" data-page="contact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h3>Connect With Us</h3>
                 <div class="social-media">
-                    <a href="#" class="social-icon">Facebook</a>
-                    <a href="#" class="social-icon">Instagram</a>
-                    <a href="#" class="social-icon">Twitter</a>
+                    <a href="#" class="social-icon">📘 Facebook</a>
+                    <a href="#" class="social-icon">📷 Instagram</a>
+                    <a href="#" class="social-icon">🐦 Twitter</a>
                 </div>
                 <div class="newsletter">
                     <h4>Subscribe to our newsletter</h4>
